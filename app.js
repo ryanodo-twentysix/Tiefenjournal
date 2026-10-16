@@ -181,6 +181,13 @@ const EXTRA = {
     'ask.cancel': 'Abbrechen',
     'ask.remove': 'Entfernen',
     'express.open': 'Ohne Worte',
+    'backup.firstTitle': 'Eine Woche Tiefenjournal',
+    'backup.againTitle': 'Zeit für eine neue Sicherung',
+    'backup.body': 'Deine Einträge liegen nur in diesem Browser. Eine Sicherung als Datei schützt sie, falls die Seitendaten einmal gelöscht werden — Safari auf iPhone und iPad tut das zum Beispiel nach etwa sieben Tagen ohne Besuch.',
+    'backup.since': (days, n) => `Deine letzte Sicherung ist ${days} Tage her; seitdem ${n === 1 ? 'ist ein Eintrag' : `sind ${n} Einträge`} dazugekommen.`,
+    'backup.now': 'Jetzt sichern',
+    'backup.later': 'Später',
+    'backup.snoozed': 'In einer Woche erinnere ich dich wieder.',
     'express.sub': 'Zeichnen oder einfach Stimme — wenn Sätze gerade nicht passen',
     'express.keptDrawing': 'Zeichnung behalten',
     'express.keptVoice': 'Aufnahme behalten',
@@ -383,6 +390,13 @@ const EXTRA = {
     'ask.cancel': 'Cancel',
     'ask.remove': 'Remove',
     'express.open': 'Without words',
+    'backup.firstTitle': 'One week of Tiefenjournal',
+    'backup.againTitle': 'Time for a fresh backup',
+    'backup.body': 'Your entries live only in this browser. A backup file protects them in case the site data is ever cleared — Safari on iPhone and iPad, for example, does this after about seven days without a visit.',
+    'backup.since': (days, n) => `Your last backup was ${days} days ago; ${n === 1 ? 'one entry has' : `${n} entries have`} been added since.`,
+    'backup.now': 'Back up now',
+    'backup.later': 'Later',
+    'backup.snoozed': 'I will remind you again in a week.',
     'express.sub': 'Draw, or just use your voice — when sentences don’t fit right now',
     'express.keptDrawing': 'Drawing kept',
     'express.keptVoice': 'Recording kept',
@@ -1006,6 +1020,7 @@ async function refresh() {
   renderProjects();
   renderFields();
   renderChat();
+  renderBackupNudge();
   await renderSettings();
 }
 
@@ -1891,11 +1906,11 @@ async function offerFile(filename, blob, okMessage) {
     try {
       await downloads.save({ filename, data: blob });
       toast(okMessage);
-      return;
+      return true;
     } catch (err) {
       // „declined" heißt: Der Mensch hat nein gesagt. Alles andere heißt:
       // Der Weg war versperrt — dann lohnt sich der zweite Versuch.
-      if (err?.code === 'declined') { toast(t('settings.exportDeclined')); return; }
+      if (err?.code === 'declined') { toast(t('settings.exportDeclined')); return false; }
     }
   }
 
@@ -1907,10 +1922,11 @@ async function offerFile(filename, blob, okMessage) {
     link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 5000);
     toast(embedded() ? t('take.maybeSaved') : okMessage);
-    return;
+    return true;
   } catch { /* auch das ging nicht */ }
 
   toast(t('take.noWay'));
+  return false;
 }
 
 /**
@@ -2395,7 +2411,7 @@ async function renderSettings() {
     }, t('settings.wipe'))));
 
   wrap.append(el('p', { class: 'muted', style: 'text-align:center;font-size:.76rem;padding:10px 0 4px' },
-    'Tiefenjournal 1.5'));
+    'Tiefenjournal 1.6'));
 }
 
 /**
@@ -2448,8 +2464,65 @@ async function takeArchive(button, status) {
 
 async function doExport() {
   const data = await db.exportAll({ withAudio: false });
-  await offerFile(`tiefenjournal-${new Date().toISOString().slice(0, 10)}.json`,
+  const saved = await offerFile(`tiefenjournal-${new Date().toISOString().slice(0, 10)}.json`,
     new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }), t('settings.exportSaved'));
+  if (saved && state.storageOk) {
+    state.config = await db.saveConfig({ lastExportAt: new Date().toISOString() });
+    renderBackupNudge();
+  }
+}
+
+/* ═══════════ Sicherungserinnerung ═══════════
+ *
+ * Die Einträge liegen nur in diesem Browser, und Safari räumt die Daten einer
+ * Seite nach etwa sieben Tagen ohne Besuch ab. Deshalb nach einer Woche ein
+ * leiser Hinweis — kein Dialog, keine Wiederholung bei jedem Öffnen: Wer
+ * „Später" sagt, hört eine Woche lang nichts, und nach einer Sicherung kommt
+ * er nur wieder, wenn seitdem etwas Neues dazugekommen ist.
+ */
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+function backupDue() {
+  if (!state.storageOk) return null;
+  const real = state.entries.filter(e => !e.demo);
+  if (!real.length) return null;
+
+  const now = Date.now();
+  const snoozed = Date.parse(state.config.backupSnoozedUntil || '') || 0;
+  if (snoozed > now) return null;
+
+  const last = Date.parse(state.config.lastExportAt || '') || 0;
+  const firstAt = Math.min(...real.map(e => Date.parse(e.createdAt) || now));
+  if (now - (last || firstAt) < WEEK_MS) return null;
+
+  const added = last ? real.filter(e => (Date.parse(e.createdAt) || 0) > last).length : real.length;
+  if (last && !added) return null;
+  return { first: !last, days: Math.floor((now - last) / 86400000), added };
+}
+
+function renderBackupNudge() {
+  const host = $('#backup-nudge');
+  if (!host) return;
+  host.textContent = '';
+  const due = backupDue();
+  host.hidden = !due;
+  if (!due) return;
+
+  host.append(el('div', { class: 'backup' },
+    el('h3', { class: 'backup__t' }, due.first ? t('backup.firstTitle') : t('backup.againTitle')),
+    el('p', { class: 'backup__p' }, due.first ? t('backup.body') : t('backup.since', due.days, due.added)),
+    el('div', { class: 'backup__row' },
+      el('button', { class: 'btn btn--tiny btn--green', type: 'button', onclick: doExport }, t('backup.now')),
+      el('button', {
+        class: 'btn btn--tiny', type: 'button',
+        onclick: async () => {
+          state.config = await db.saveConfig({
+            backupSnoozedUntil: new Date(Date.now() + WEEK_MS).toISOString()
+          });
+          renderBackupNudge();
+          toast(t('backup.snoozed'));
+        }
+      }, t('backup.later')))));
 }
 
 /* ═══════════ Beispielverlauf ═══════════ */

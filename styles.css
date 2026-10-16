@@ -1642,3 +1642,14 @@ body.is-choosing .opts, body.is-choosing .walk { display: none; }
 .walk__dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line-hi); }
 .walk__dots i.on { background: var(--flare-o); width: 18px; border-radius: 4px; }
 .walk__btns { display: flex; gap: 8px; }
+
+/* ─────────── Sicherungserinnerung ───────────
+   Leise: gleiche Fläche wie eine Karte, grüne Kante wie alles, was bewahrt. */
+.backup {
+  margin-bottom: 14px; padding: 14px 16px;
+  background: var(--raised); border: 1px solid var(--green-line);
+  border-left: 3px solid var(--green); border-radius: var(--r);
+}
+.backup__t { font-size: .95rem; margin-bottom: 4px; }
+.backup__p { font-size: .85rem; line-height: 1.55; color: var(--ink-soft); }
+.backup__row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 11px; }
