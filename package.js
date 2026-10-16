@@ -254,7 +254,16 @@ self.addEventListener('fetch', event => {
  * Reset kommen sonst vom Gastgeber. Für die eigenständige Fassung muss das
  * Dokument vollständig sein.
  */
-function wrapDocument(inner, lang) {
+function wrapDocument(source, lang) {
+  // Die Seite kann als vollständiges Dokument vorliegen (GitHub Pages) oder
+  // nur als Körper (Artefakt). Aus dem vollständigen nur Körper und Stilblätter.
+  let inner = source;
+  const body = source.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+  if (body) {
+    const head = source.match(/<head[^>]*>([\s\S]*)<\/head>/i)?.[1] || '';
+    const links = head.match(/<link\b[^>]*>/gi)?.filter(l => !/rel="icon"/i.test(l)).join('\n') || '';
+    inner = `${links}\n${body[1]}`;
+  }
   return `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
