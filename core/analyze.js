@@ -465,7 +465,7 @@ function deriveInsights(ctx) {
       kind: 'coupling',
       text: de
         ? `„${co.emotionLabel}" und „${co.conflictLabel}" treten ${co.count}-mal zusammen auf. Wenn ein Gefühl sich verlässlich an ein Thema heftet, lohnt die Frage, was davon zuerst da war.`
-        : `"${co.emotionLabel}" and "${co.conflictLabel}" occur together ${co.count} times. When a feeling reliably attaches to a theme, it is worth asking which came first.`,
+        : `"${co.emotionLabel}" and "${co.conflictLabel}" occur together ${co.count} times. When a feeling reliably attaches to a pattern, it is worth asking which came first.`,
       literature: LITERATURE.eft.ref
     });
   }

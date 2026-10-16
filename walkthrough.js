@@ -106,7 +106,7 @@ const STEPS = [
       ],
       why: 'Wird ein innerer Konflikt in ein Entweder-oder gepresst, springt man zwischen den Seiten hin und her — das erzeugt Frust und Verwirrung. George Vaillant zählt das Ganz-gut-oder-ganz-schlecht-Sehen zu den unreifen Abwehrformen; reife Bewältigung lässt den Konflikt bestehen und gibt ihm eine Form. Menschen in Psychotherapie, die gemischte Gefühle zulassen konnten, ging es in den Wochen danach messbar besser.',
       short: 'Vaillant 1992, 2000 · Larsen et al. 2001 · Adler & Hershfield 2012',
-      hint: 'Tippe auf „Umtreibt“ und dort auf „Widersprüche halten“.'
+      hint: 'Tippe auf „Mustererkennung“ und dort auf „Widersprüche halten“.'
     },
     en: {
       eyebrow: 'Step 2 · Patterns',
@@ -117,7 +117,7 @@ const STEPS = [
       ],
       why: 'Squeeze an inner conflict into either-or and you swing between the sides — which breeds frustration and confusion. George Vaillant counts all-good-or-all-bad seeing among the immature defences; mature coping lets the conflict stand and gives it a form. People in psychotherapy who could allow mixed feelings measurably improved in the weeks that followed.',
       short: 'Vaillant 1992, 2000 · Larsen et al. 2001 · Adler & Hershfield 2012',
-      hint: 'Tap "Stewing on", then "Holding Contradictions".'
+      hint: 'Tap "Pattern Recognition", then "Holding Contradictions".'
     }
   },
   {
@@ -142,7 +142,7 @@ const STEPS = [
       ],
       why: 'In cognitive therapy, the use of Socratic questions predicts how much symptoms ease from one session to the next. And looking at a painful experience from a little distance, instead of circling inside it, means less brooding and more understanding.',
       short: 'Braun et al. 2015 · Kross & Ayduk 2011',
-      hint: 'Tap "Dialogue" — start openly or from a theme.'
+      hint: 'Tap "Dialogue" — start openly or from a pattern.'
     }
   },
   {
@@ -176,7 +176,7 @@ const UI = {
 /**
  * @param deps.el, deps.lang()   Werkzeug und Sprache der App
  * @param deps.goTo(page)        Seite aufschlagen
- * @param deps.showPane(which)   Teilbereich auf „Umtreibt“
+ * @param deps.showPane(which)   Teilbereich auf „Mustererkennung“
  * @param deps.setMode(mode)     Erzählen / Drei Sätze
  */
 export function openWalkthrough({ el, lang, goTo, showPane, setMode }) {

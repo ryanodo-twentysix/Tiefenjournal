@@ -43,7 +43,7 @@ applyLook();
 
 const EXTRA = {
   de: {
-    'nav.projects': 'Umtreibt',
+    'nav.projects': 'Mustererkennung',
     'nav.struct': 'Bereiche',
 
     'journal.title': 'Erzähl, was los ist',
@@ -84,7 +84,7 @@ const EXTRA = {
     'nudge.made': s => `„${s}" angelegt`,
 
     'proj.eyebrow': 'Synthese',
-    'proj.title': 'Was dich umtreibt',
+    'proj.title': 'Mustererkennung',
     'proj.purpose': 'Das hier ersetzt keine Therapie. Es führt zusammen, was du über Wochen aufgeschrieben hast, und hält es gegen einen psychotherapeutischen Rahmen — damit sichtbar wird, woran zu arbeiten sich lohnt. Was du damit machst, entscheidest du.',
     'proj.empty': 'Noch keine Projekte',
     'proj.emptyBody': 'Projekte entstehen aus Wiederholung. Ab etwa drei Einträgen, die dasselbe Spannungsfeld berühren, fängt dieser Abschnitt an, etwas vorzuschlagen.',
@@ -244,7 +244,7 @@ const EXTRA = {
   },
 
   en: {
-    'nav.projects': 'Stewing on',
+    'nav.projects': 'Pattern Recognition',
     'nav.struct': 'Areas',
 
     'journal.title': 'Tell it what is going on',
@@ -255,7 +255,7 @@ const EXTRA = {
     'save.hintJournal': 'A few sentences are enough. You can save whenever you like.',
 
     'struct.title': 'Your areas',
-    'struct.lede': 'Theme detection sorts by a fixed lexicon. Here you build your own order: "Relationships" can branch into "Relationship with my parents", and further. You can create one any time — including mid-conversation.',
+    'struct.lede': 'Pattern detection sorts by a fixed lexicon. Here you build your own order: "Relationships" can branch into "Relationship with my parents", and further. You can create one any time — including mid-conversation.',
     'struct.empty': 'No areas yet',
     'struct.emptyBody': 'Start with something coarse — "Relationships", "Work", "Me with myself". You can branch later.',
     'struct.new': 'Create an area',
@@ -271,21 +271,21 @@ const EXTRA = {
       : 'Remove this area?',
     'struct.under': n => `${n} sub-area${n === 1 ? '' : 's'}`,
     'struct.linked': n => `${n} entr${n === 1 ? 'y' : 'ies'} match`,
-    'struct.linkThemes': 'Link themes',
-    'struct.linkHint': 'Which detected themes belong in this area? It will then show you the matching entries.',
+    'struct.linkThemes': 'Link patterns',
+    'struct.linkHint': 'Which detected patterns belong in this area? It will then show you the matching entries.',
     'struct.done': 'Done',
     'struct.maxDepth': 'Deliberately no deeper — three levels are enough to order things.',
     'struct.talk': 'Talk about this',
 
     'nudge.title': s => `Make "${s}" an area?`,
-    'nudge.body': 'That theme just came up in conversation. An area turns it into a place where you can find it again.',
+    'nudge.body': 'That pattern just came up in conversation. An area turns it into a place where you can find it again.',
     'nudge.under': p => `Will be filed under "${p}".`,
     'nudge.yes': 'Create',
     'nudge.no': 'Not now',
     'nudge.made': s => `"${s}" created`,
 
     'proj.eyebrow': 'Synthesis',
-    'proj.title': "What you're stewing on",
+    'proj.title': 'Pattern Recognition',
     'proj.purpose': 'This replaces no therapy. It brings together what you have written over weeks and holds it against a psychotherapeutic frame — so that what is worth working on becomes visible. What you do with it is yours to decide.',
     'proj.empty': 'No projects yet',
     'proj.emptyBody': 'Projects come from repetition. From about three entries touching the same field of tension, this section starts proposing something.',
@@ -330,7 +330,7 @@ const EXTRA = {
     'metrics.mostNamedNote': 'says something about your language, not your life',
 
     'patterns.domainsNote': 'Where your experience takes place — ordered by the settings you describe.',
-    'patterns.couplingIntro': 'Which feelings regularly appear alongside which theme.',
+    'patterns.couplingIntro': 'Which feelings regularly appear alongside which pattern.',
 
     'demo.badge': 'Example',
     'demo.banner': 'A short example history shows what Timeline, Projects and Dialogue look like once there is something there. It does not count as your entries and is never exported.',
@@ -367,14 +367,14 @@ const EXTRA = {
     'settings.persistOk': 'Persistent storage active',
     'settings.persistNo': 'The browser declined. Export stays your safety net.',
     'settings.usage': (u, q) => `${u} of ${q} used`,
-    'proj.tabProjects': 'Themes',
+    'proj.tabProjects': 'Patterns',
     'proj.tabFields': 'Holding Contradictions',
     'mic.label': 'Dictate',
     'mic.hold': 'Hold',
     'fields.open': 'See it as a picture',
     'fields.openWith': n => n === 1
-      ? 'Have a look — on one theme both were already there at once'
-      : `Have a look — on ${n} themes both were already there at once`,
+      ? 'Have a look — on one pattern both were already there at once'
+      : `Have a look — on ${n} patterns both were already there at once`,
     'struct.asList': 'List',
     'struct.asMap': 'Map',
     'struct.mapNote': 'The map shows what hangs on what. The third level appears as a dot — labelled in the list.',
@@ -466,7 +466,8 @@ const state = {
   newGoalFor: null, openDefence: null,
   fields: [],
   structView: 'list', projectPane: 'projects', entryMode: 'journal',
-  here: 'heute', storageOk: true, busy: false
+  here: 'heute', storageOk: true, busy: false,
+  openProjects: new Set()
 };
 
 let base = makeT('de');
@@ -1707,12 +1708,29 @@ function projectCard(p) {
   const filled = Math.max(1, Math.min(segments, Math.round((ev.share / 100) * segments) || 1));
   const total = state.analysis?.entryCount || ev.entryCount;
 
-  return el('article', { class: `proj${p.adopted ? ' is-adopted' : ''}` },
-    el('div', { class: 'proj__top' },
-      el('div', {},
-        el('h3', { class: 'proj__title' }, p.title),
-        el('p', { class: 'proj__frame' }, p.frameworkLabel)),
-      p.adopted ? el('span', { class: 'chip' }, '✓') : null),
+  // Zuerst nur die Überschrift: Eine Liste voller Zahlen und Rahmentexte
+  // erschlägt, bevor man weiß, worum es geht. Wer ein Muster wiedererkennt,
+  // klappt es auf und taucht in die Zahlen ein.
+  const open = state.openProjects.has(p.conflictId) || state.newGoalFor === p.conflictId;
+  const bodyId = `proj-body-${p.conflictId}`;
+  const toggle = () => {
+    if (state.openProjects.has(p.conflictId)) state.openProjects.delete(p.conflictId);
+    else state.openProjects.add(p.conflictId);
+    renderProjects();
+  };
+
+  return el('article', { class: `proj${p.adopted ? ' is-adopted' : ''}${open ? ' is-open' : ''}` },
+    el('button', {
+      class: 'proj__top', type: 'button',
+      'aria-expanded': open ? 'true' : 'false', 'aria-controls': bodyId, onclick: toggle
+    },
+      el('span', { class: 'proj__head' },
+        el('span', { class: 'proj__title' }, p.title),
+        el('span', { class: 'proj__frame' }, p.frameworkLabel),
+        open ? null : el('span', { class: 'proj__peek' }, t('proj.entries', ev.entryCount, total))),
+      p.adopted ? el('span', { class: 'chip' }, '✓') : null,
+      el('span', { class: 'proj__chev', 'aria-hidden': 'true' })),
+    open ? el('div', { class: 'proj__body', id: bodyId },
     el('div', { class: 'proj__meter', 'aria-hidden': 'true' },
       Array.from({ length: segments }, (_, i) => el('i', { class: i < filled ? 'on' : '' }))),
     el('div', { class: 'proj__facts' },
@@ -1736,7 +1754,7 @@ function projectCard(p) {
       }, p.adopted ? t('proj.drop') : t('proj.adopt')),
       el('button', {
         class: 'btn btn--tiny', type: 'button', onclick: () => startProjectDialogue(p)
-      }, t('proj.talk')))
+      }, t('proj.talk')))) : null
   );
 }
 
@@ -2362,7 +2380,7 @@ async function renderSettings() {
     }, t('settings.wipe'))));
 
   wrap.append(el('p', { class: 'muted', style: 'text-align:center;font-size:.76rem;padding:10px 0 4px' },
-    'Tiefenjournal 1.3'));
+    'Tiefenjournal 1.4'));
 }
 
 /**

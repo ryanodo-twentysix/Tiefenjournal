@@ -221,13 +221,13 @@ function measureMovement(matching, de) {
   const notes = {
     leichter: de
       ? `Die Tönung rund um dieses Thema hat sich aufgehellt (${fmt(early)} → ${fmt(late)}). Das heißt nicht, dass es gelöst ist — aber etwas bewegt sich.`
-      : `The tone around this theme has brightened (${fmt(early)} → ${fmt(late)}). That does not mean it is solved — but something is moving.`,
+      : `The tone around this pattern has brightened (${fmt(early)} → ${fmt(late)}). That does not mean it is solved — but something is moving.`,
     schwerer: de
       ? `Die Tönung rund um dieses Thema hat sich eingetrübt (${fmt(early)} → ${fmt(late)}). Das ist ein Grund, genauer hinzusehen, kein Grund zur Sorge.`
-      : `The tone around this theme has darkened (${fmt(early)} → ${fmt(late)}). A reason to look closer, not a reason to worry.`,
+      : `The tone around this pattern has darkened (${fmt(early)} → ${fmt(late)}). A reason to look closer, not a reason to worry.`,
     stabil: de
       ? `Die Tönung bleibt ähnlich (${fmt(early)} → ${fmt(late)}). Themen halten sich oft lange, bevor sie kippen.`
-      : `The tone stays similar (${fmt(early)} → ${fmt(late)}). Themes often hold for a long time before they shift.`
+      : `The tone stays similar (${fmt(early)} → ${fmt(late)}). Patterns often hold for a long time before they shift.`
   };
 
   return { direction, delta: Math.round(delta * 100) / 100, early, late, note: notes[direction] };

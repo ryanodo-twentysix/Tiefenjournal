@@ -315,7 +315,7 @@ const deLabels = {
 };
 
 const enLabels = {
-  overviewTitle: 'Theme Overview — Full History',
+  overviewTitle: 'Pattern Overview — Full History',
   monthReport: 'Monthly Report',
   generated: 'Generated',
   disclaimer: '**Not a diagnostic document.** This read-out counts linguistic markers in your own texts. It describes which words you use — not how you are. Read everything here as hypothesis, not finding.',
@@ -334,12 +334,12 @@ const enLabels = {
   domainsTitle: 'Life domains',
   emotionsTitle: 'Feelings by frequency',
   couplingTitle: 'Couplings: feeling ↔ conflict',
-  couplingIntro: 'Which feelings regularly show up alongside which theme.',
+  couplingIntro: 'Which feelings regularly show up alongside which pattern.',
   monthlyTitle: 'Monthly trend',
-  theme: 'Theme', pattern: 'Pattern', domain: 'Domain', emotion: 'Feeling',
+  theme: 'Pattern', pattern: 'Pattern', domain: 'Domain', emotion: 'Feeling',
   entriesShort: 'Entries', weight: 'Weight', markers: 'Most frequent markers',
   level: 'Level', count: 'Count', avgIntensity: 'Avg. intensity',
-  month: 'Month', tone: 'Tone', leadingThemes: 'Leading themes',
+  month: 'Month', tone: 'Tone', leadingThemes: 'Leading patterns',
   excerpts: 'Excerpts', entriesThisMonth: 'Entries this month',
   levels: { reif: 'mature', neurotisch: 'neurotic', unreif: 'immature' },
   methodTitle: 'How this is calculated',

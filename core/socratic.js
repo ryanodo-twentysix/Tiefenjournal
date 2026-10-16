@@ -418,7 +418,7 @@ function moveException(theme, briefing, lang, usedIds = []) {
     entryId: entry.id,
     text: de
       ? `Eine Stelle fällt mir auf: Am ${entry.date} geht es um dasselbe Thema, aber du fühlst dich ${feeling}${best.because ? `, weil ${lowerFirst(trim(best.because, 160))}` : ''}.`
-      : `One spot stands out: on ${entry.date} the same theme comes up, but you feel ${feeling}${best.because ? `, because ${lowerFirst(trim(best.because, 160))}` : ''}.`,
+      : `One spot stands out: on ${entry.date} the same pattern comes up, but you feel ${feeling}${best.because ? `, because ${lowerFirst(trim(best.because, 160))}` : ''}.`,
     question: de
       ? 'Was war dort anders? Nicht an der Lage — an dir, oder an dem, was du getan hast.'
       : 'What was different there? Not in the situation — in you, or in what you did.'
@@ -636,7 +636,7 @@ export function openingMessage(entries, lang = 'de', project = null) {
   if (project) {
     lines.push(de
       ? `Wir arbeiten an „${project.title}". Ich habe deine ${briefing.entries} Einträge dazu vor mir — ${project.evidence.entryCount} davon berühren dieses Thema, von ${project.evidence.firstDate} bis ${project.evidence.lastDate}.`
-      : `We are working on "${project.title}". I have your ${briefing.entries} entries in front of me — ${project.evidence.entryCount} of them touch this theme, from ${project.evidence.firstDate} to ${project.evidence.lastDate}.`);
+      : `We are working on "${project.title}". I have your ${briefing.entries} entries in front of me — ${project.evidence.entryCount} of them touch this pattern, from ${project.evidence.firstDate} to ${project.evidence.lastDate}.`);
   } else {
     const span = briefing.spanDays > 1
       ? (de ? ` über ${briefing.spanDays} Tage` : ` across ${briefing.spanDays} days`)
@@ -649,7 +649,7 @@ export function openingMessage(entries, lang = 'de', project = null) {
     if (top && top.count >= 2) {
       lines.push(de
         ? `Am häufigsten kommt „${top.label}" durch — in ${top.count} Einträgen.`
-        : `The theme coming through most often is "${top.label}" — in ${top.count} entries.`);
+        : `The pattern coming through most often is "${top.label}" — in ${top.count} entries.`);
       const second = briefing.themes[1];
       if (second && second.count >= 2) {
         lines.push(de

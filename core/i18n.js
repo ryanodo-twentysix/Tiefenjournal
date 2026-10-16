@@ -235,7 +235,7 @@ export const STRINGS = {
     'save': 'Save entry',
     'save.hint1': 'One feeling with a reason is enough to save.',
     'save.hintReady': n => `${n} ${n === 1 ? 'sentence' : 'sentences'} ready.`,
-    'save.done': 'Saved. The themes folder is updating in the background.',
+    'save.done': 'Saved. The patterns folder is updating in the background.',
     'save.error': 'Saving failed',
 
     'palette.title': 'Feelings',
@@ -255,7 +255,7 @@ export const STRINGS = {
     'timeline.confirmDelete': 'Delete this entry permanently? This cannot be undone.',
     'timeline.deleted': 'Entry deleted',
 
-    'patterns.eyebrow': 'Themes folder',
+    'patterns.eyebrow': 'Patterns folder',
     'patterns.title': 'Patterns over time',
     'patterns.openFolder': 'Open folder',
     'patterns.rebuild': 'Rebuild reports',
@@ -325,7 +325,7 @@ export const STRINGS = {
     'settings.on': 'On', 'settings.off': 'Off',
 
     'disclaimer.title': 'What this tool is — and is not',
-    'disclaimer.body': 'This is a journal with a word read-out, not diagnostics and not treatment. Theme detection counts linguistic markers in your own texts; it understands neither irony nor negation nor context. Everything that appears here as a "pattern" is a hypothesis to think with.',
+    'disclaimer.body': 'This is a journal with a word read-out, not diagnostics and not treatment. Pattern detection counts linguistic markers in your own texts; it understands neither irony nor negation nor context. Everything that appears here as a "pattern" is a hypothesis to think with.',
     'disclaimer.points': [
       'No language model, no cloud: everything runs offline on this machine.',
       'The categories are modelled on OPD-3, Anna Freud/Vaillant and the CCRT method — as a reading grid, not a finding.',

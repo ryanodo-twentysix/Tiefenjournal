@@ -304,9 +304,9 @@ export const TENSION_FRAMING = {
     beliefUnmark: 'Remove mark',
     beliefMarked: 'Marked by you',
     beliefNone: 'None of these',
-    noAxis: 'So far only one side of this theme is in your entries. Two circles need both sides, each at least twice.',
+    noAxis: 'So far only one side of this pattern is in your entries. Two circles need both sides, each at least twice.',
     empty: 'Nothing here yet',
-    emptyBody: 'The pictures grow out of your themes. As soon as one shows up across several entries, and from both sides, you will see it here.',
+    emptyBody: 'The pictures grow out of your patterns. As soon as one shows up across several entries, and from both sides, you will see it here.',
     entriesOn: n => `${n} ${n === 1 ? 'entry' : 'entries'}`,
     sourceTitle: 'Where this comes from'
   }
