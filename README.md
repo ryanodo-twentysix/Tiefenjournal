@@ -22,7 +22,7 @@ Three steps that build on each other:
 
 A guided tour after the language choice explains the three steps inside the app, along with the research behind them. Entries can also be recorded without words, as a drawing or a voice recording.
 
-### How it is built
+### Technology
 
 - Plain HTML, CSS and JavaScript (ES modules); no framework, no build step
 - Storage in IndexedDB, entirely local; export and import as JSON
@@ -65,7 +65,7 @@ Drei Schritte, die aufeinander aufbauen:
 
 Ein Rundgang nach der Sprachwahl erklärt die drei Schritte direkt in der App, mit der Forschung dahinter. Einträge lassen sich auch ohne Worte festhalten, als Zeichnung oder Sprachaufnahme.
 
-### Wie sie gebaut ist
+### Technik
 
 - Reines HTML, CSS und JavaScript (ES-Module), ohne Framework und ohne Build-Schritt
 - Speicherung in IndexedDB, vollständig lokal; Export und Import als JSON
