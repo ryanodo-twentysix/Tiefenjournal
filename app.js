@@ -2295,6 +2295,20 @@ async function renderSettings() {
     wrap.append(el('div', { class: 'warn warn--alert' }, el('p', {}, t('storage.blocked'))));
   }
 
+  // Allererst die Sprache, zweisprachig beschriftet: Wer die eingestellte
+  // Sprache nicht lesen kann, muss den Schalter trotzdem finden. Weiter unten
+  // zwischen den Einstellungen war er praktisch unauffindbar.
+  wrap.append(el('div', { class: 'set set--lang' },
+    el('div', { class: 'set__l' }, 'Sprache · Language'),
+    el('div', { class: 'set__c' },
+      seg([['de', 'Deutsch'], ['en', 'English']], state.config.lang, async v => {
+        if (v === state.config.lang) return;
+        await commitLang(v);
+        initSlots(); renderSlots(); renderPalette();
+        await refresh(); renderSettings();
+        toast(v === 'en' ? 'Language: English' : 'Sprache: Deutsch');
+      }))));
+
   // Ganz oben: die App mitnehmen. Ein Browserfenster vergisst alles, sobald
   // jemand die Seitendaten löscht — und bis ein Journal genug Einträge für
   // die Auswertungen hat, vergehen Tage. Wer das hier testen soll, braucht
@@ -2322,13 +2336,6 @@ async function renderSettings() {
   wrap.append(setting(t('settings.purposeLabel'), t('proj.purpose'), null));
   wrap.append(setting(t('settings.voiceLabel'), t('settings.voiceDesc'), null));
 
-  wrap.append(setting(t('settings.langLabel'), t('settings.langDesc'),
-    seg([['de', 'Deutsch'], ['en', 'English']], state.config.lang, async v => {
-      if (v === state.config.lang) return;
-      await commitLang(v);
-      initSlots(); renderSlots(); renderPalette();
-      await refresh(); renderSettings();
-    })));
 
   wrap.append(setting(t('settings.slotsLabel'), t('settings.slotsDesc'),
     seg([['2', '2'], ['3', '3'], ['4', '4'], ['5', '5']], String(state.config.feelingSlots), async v => {
@@ -2411,7 +2418,7 @@ async function renderSettings() {
     }, t('settings.wipe'))));
 
   wrap.append(el('p', { class: 'muted', style: 'text-align:center;font-size:.76rem;padding:10px 0 4px' },
-    'Tiefenjournal 1.6'));
+    'Tiefenjournal 1.7'));
 }
 
 /**

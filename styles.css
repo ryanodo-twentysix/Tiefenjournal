@@ -1653,3 +1653,7 @@ body.is-choosing .opts, body.is-choosing .walk { display: none; }
 .backup__t { font-size: .95rem; margin-bottom: 4px; }
 .backup__p { font-size: .85rem; line-height: 1.55; color: var(--ink-soft); }
 .backup__row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 11px; }
+
+/* Sprachwahl ganz oben auf „Mehr" */
+.set--lang { border-color: var(--blue-line); }
+.set--lang .set__c { margin-top: 10px; }
