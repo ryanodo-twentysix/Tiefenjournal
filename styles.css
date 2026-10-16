@@ -1657,3 +1657,48 @@ body.is-choosing .opts, body.is-choosing .walk { display: none; }
 /* Sprachwahl ganz oben auf „Mehr" */
 .set--lang { border-color: var(--blue-line); }
 .set--lang .set__c { margin-top: 10px; }
+
+/* ─────────── Gespeichert-Blase nach dem ersten Eintrag ───────────
+   Eine Sprechblase, die vom Speichern-Knopf her kommt: gleiche Ecke,
+   Zipfel nach unten rechts. */
+.savedtip { position: fixed; inset: 0; z-index: 85; }
+.savedtip__shade { position: absolute; inset: 0; background: rgb(20 20 20 / .32); animation: tipfade .2s ease; }
+.savedtip__bubble {
+  position: absolute; right: 16px; left: 16px;
+  bottom: calc(var(--tiles-h) + var(--safe-b) + 74px);
+  max-width: 440px; margin-left: auto;
+  max-height: calc(100dvh - var(--tiles-h) - 120px); overflow-y: auto;
+  padding: 18px 18px 16px;
+  background: var(--raised); color: var(--ink);
+  border: 1px solid var(--line-hi); border-radius: 22px 22px 6px 22px;
+  box-shadow: 0 14px 40px rgb(0 0 0 / .22);
+  animation: tippop .28s var(--ease);
+}
+.savedtip__bubble::after {
+  content: ""; position: absolute; right: 34px; bottom: -9px;
+  width: 16px; height: 16px; background: var(--raised);
+  border-right: 1px solid var(--line-hi); border-bottom: 1px solid var(--line-hi);
+  transform: rotate(45deg);
+}
+.savedtip__icon {
+  display: grid; place-items: center; width: 34px; height: 34px; margin-bottom: 8px;
+  border-radius: 50%; background: var(--green-soft); color: var(--green-deep);
+  font-weight: 700;
+}
+.savedtip__title { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 10px; }
+.savedtip__list { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+.savedtip__list li {
+  position: relative; padding-left: 18px;
+  font-size: .92rem; line-height: 1.55; color: var(--ink-soft);
+}
+.savedtip__list li::before {
+  content: ""; position: absolute; left: 2px; top: .62em;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+}
+.savedtip__ios {
+  margin-top: 12px; padding: 10px 12px; border-radius: var(--r-sm);
+  background: var(--blue-soft); color: var(--ink); font-size: .86rem; line-height: 1.5;
+}
+.savedtip__row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+@keyframes tippop { from { transform: translateY(10px) scale(.98); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes tipfade { from { opacity: 0; } to { opacity: 1; } }

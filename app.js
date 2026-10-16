@@ -181,6 +181,13 @@ const EXTRA = {
     'ask.cancel': 'Abbrechen',
     'ask.remove': 'Entfernen',
     'express.open': 'Ohne Worte',
+    'tip.title': 'Gespeichert – auf diesem Gerät',
+    'tip.keep': 'Du kannst den Browser jetzt einfach schließen. Beim nächsten Öffnen ist dein Eintrag wieder da.',
+    'tip.private': 'Er liegt nur hier, in diesem Browser. Niemand sonst sieht ihn – jeder, der die App öffnet, hat sein eigenes Journal.',
+    'tip.lose': 'Verloren geht er nur, wenn du die Browserdaten löschst oder im privaten Modus schreibst. Auf einem anderen Gerät oder in einem anderen Browser beginnt ein eigenes, leeres Journal.',
+    'tip.ios': 'Tipp für iPhone und iPad: Über „Teilen“ → „Zum Home-Bildschirm“ wird Tiefenjournal zur App – dann räumt Safari deine Einträge auch nach längerer Pause nicht weg.',
+    'tip.ok': 'Verstanden',
+    'tip.backup': 'Sicherung anlegen',
     'backup.firstTitle': 'Eine Woche Tiefenjournal',
     'backup.againTitle': 'Zeit für eine neue Sicherung',
     'backup.body': 'Deine Einträge liegen nur in diesem Browser. Eine Sicherung als Datei schützt sie, falls die Seitendaten einmal gelöscht werden — Safari auf iPhone und iPad tut das zum Beispiel nach etwa sieben Tagen ohne Besuch.',
@@ -390,6 +397,13 @@ const EXTRA = {
     'ask.cancel': 'Cancel',
     'ask.remove': 'Remove',
     'express.open': 'Without words',
+    'tip.title': 'Saved – on this device',
+    'tip.keep': 'You can simply close the browser now. Next time you open the app, your entry will be there.',
+    'tip.private': 'It lives only here, in this browser. Nobody else sees it – everyone who opens the app has their own journal.',
+    'tip.lose': 'It is only lost if you clear your browser data or write in a private window. On another device or in another browser, a separate, empty journal begins.',
+    'tip.ios': 'Tip for iPhone and iPad: “Share” → “Add to Home Screen” turns Tiefenjournal into an app – then Safari won’t clear your entries even after a longer break.',
+    'tip.ok': 'Got it',
+    'tip.backup': 'Make a backup',
     'backup.firstTitle': 'One week of Tiefenjournal',
     'backup.againTitle': 'Time for a fresh backup',
     'backup.body': 'Your entries live only in this browser. A backup file protects them in case the site data is ever cleared — Safari on iPhone and iPad, for example, does this after about seven days without a visit.',
@@ -971,6 +985,7 @@ $('#save-btn').addEventListener('click', async () => {
     renderPalette();
     await refresh();
 
+    if (showStorageTip()) return;
     toast(afterSave(entry, {
       entryCount: realCount,
       streak: state.analysis?.stats?.streak || 0,
@@ -1124,6 +1139,7 @@ async function startExpress() {
   await db.putEntry(entry);
 
   await refresh();
+  if (showStorageTip()) return;
   toast(result.kind === 'voice' ? t('express.keptVoice') : t('express.keptDrawing'));
 }
 
@@ -2418,7 +2434,7 @@ async function renderSettings() {
     }, t('settings.wipe'))));
 
   wrap.append(el('p', { class: 'muted', style: 'text-align:center;font-size:.76rem;padding:10px 0 4px' },
-    'Tiefenjournal 1.7'));
+    'Tiefenjournal 1.8'));
 }
 
 /**
@@ -2488,6 +2504,54 @@ async function doExport() {
  * er nur wieder, wenn seitdem etwas Neues dazugekommen ist.
  */
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+/**
+ * Einmal, gleich nach dem ersten eigenen Eintrag: wo er jetzt liegt. Ohne
+ * Konto und Server ist das nicht selbstverständlich — viele nehmen an, eine
+ * Webseite vergesse alles beim Schließen, oder umgekehrt, alles liege in einer
+ * Cloud. Beides stimmt hier nicht, und das soll man in drei Sätzen wissen.
+ *
+ * Kommt nicht, wenn gar nicht gespeichert werden kann: Dafür steht oben auf
+ * der Seite schon der Warnhinweis.
+ *
+ * @returns true, wenn die Blase gezeigt wird (dann ohne zusätzlichen Toast)
+ */
+function showStorageTip() {
+  if (!state.storageOk || state.config.storageExplained) return false;
+  if (!state.entries.some(e => !e.demo)) return false;
+
+  const ios = /iPad|iPhone|iPod/.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const standalone = window.matchMedia?.('(display-mode: standalone)').matches || navigator.standalone;
+
+  const host = $('#savedtip');
+  const close = async () => {
+    host.hidden = true;
+    host.textContent = '';
+    state.config = await db.saveConfig({ storageExplained: true });
+  };
+
+  host.textContent = '';
+  host.append(
+    el('div', { class: 'savedtip__shade', onclick: close }),
+    el('div', { class: 'savedtip__bubble', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'savedtip-title' },
+      el('div', { class: 'savedtip__icon', 'aria-hidden': 'true' }, '✓'),
+      el('h2', { class: 'savedtip__title', id: 'savedtip-title' }, t('tip.title')),
+      el('ul', { class: 'savedtip__list' },
+        el('li', {}, t('tip.keep')),
+        el('li', {}, t('tip.private')),
+        el('li', {}, t('tip.lose'))),
+      ios && !standalone ? el('p', { class: 'savedtip__ios' }, t('tip.ios')) : null,
+      el('div', { class: 'savedtip__row' },
+        el('button', { class: 'btn btn--primary', type: 'button', onclick: close }, t('tip.ok')),
+        el('button', {
+          class: 'btn', type: 'button',
+          onclick: async () => { await close(); await doExport(); }
+        }, t('tip.backup')))));
+  host.hidden = false;
+  host.querySelector('.btn--primary')?.focus();
+  return true;
+}
 
 function backupDue() {
   if (!state.storageOk) return null;
