@@ -23,6 +23,7 @@ const APP_FILES = [
   // die ausgepackte App beim Laden abbrechen. Nebeneffekt: die mitgenommene
   // Fassung kann sich selbst wieder einpacken.
   'index.html', 'app.js', 'db.js', 'styles.css', 'package.js', 'express.js', 'guide.js',
+  'look.js', 'walkthrough.js',
   'dictate.js', 'core/whisper.js', 'core/whisper-worker.js',
   'core/i18n.js', 'core/emotions.js', 'core/themes.js', 'core/analyze.js',
   'core/reports.js', 'core/socratic.js', 'core/patterns.js', 'core/projects.js',

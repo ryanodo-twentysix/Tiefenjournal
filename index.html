@@ -123,10 +123,21 @@
   <!-- Beschriftet, nicht nur drei Punkte: als reines Symbol war „Mehr" nicht
        zu finden, und darunter liegt der Download. -->
   <button class="topbar__more" id="open-more" type="button">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
     <span data-i18n="nav.more">Mehr</span>
   </button>
+  <!-- Drei Punkte: Aussehen und Rundgang. Getrennt von „Mehr", weil dort die
+       Verwaltung liegt (Sichern, Löschen) und hier nur das, was man gern
+       einmal ausprobiert. -->
+  <button class="topbar__opts" id="open-opts" type="button" aria-label="Optionen" aria-haspopup="true" aria-expanded="false" aria-controls="opts">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>
+  </button>
 </header>
+
+<div class="opts" id="opts" hidden></div>
+
+<!-- Rundgang nach der Sprachwahl: ein Blatt über der echten App. -->
+<div class="walk" id="walk" hidden></div>
 
 <main class="pages" id="pages">
 

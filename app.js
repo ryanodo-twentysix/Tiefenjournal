@@ -32,6 +32,12 @@ import { buildAppPackage, buildArchive } from './package.js';
 import { openExpress } from './express.js';
 import { openGuide } from './guide.js';
 import { attachDictation, dictationState, dictationHint } from './dictate.js';
+import { applyLook, initOptions } from './look.js';
+import { openWalkthrough, walkSeen } from './walkthrough.js';
+
+// Farbe und Form sofort, noch vor allem anderen — sonst blitzt beim Öffnen
+// die Ausgangspalette auf.
+applyLook();
 
 /* ═══════════ Ergänzende Texte ═══════════ */
 
@@ -198,6 +204,10 @@ const EXTRA = {
     'settings.introLabel': 'Wozu diese App gut ist',
     'settings.introDesc': 'Die Einführungsseite von ganz am Anfang — die fünf Teile und wie sie zusammenhängen.',
     'settings.introOpen': 'Noch einmal lesen',
+    'settings.walkLabel': 'Rundgang',
+    'settings.walkDesc': 'Die drei Schritte und die Forschung dahinter — direkt an den Stellen in der App, an denen sie liegen.',
+    'settings.walkOpen': 'Rundgang starten',
+    'opts.label': 'Optionen',
 
     'settings.exportLabel': 'Sichern & übertragen',
     'settings.exportDesc': 'Eine Datei mit allen echten Einträgen, Bereichen und Dialogen. Dieselbe Datei liest die PC-Fassung ein.',
@@ -395,6 +405,10 @@ const EXTRA = {
     'settings.introLabel': 'What this app is for',
     'settings.introDesc': 'The opening page from the very beginning — the five parts and how they hang together.',
     'settings.introOpen': 'Read it again',
+    'settings.walkLabel': 'Tour',
+    'settings.walkDesc': 'The three steps and the research behind them — right where they live in the app.',
+    'settings.walkOpen': 'Start the tour',
+    'opts.label': 'Options',
 
     'settings.exportLabel': 'Back up & transfer',
     'settings.exportDesc': 'One file with all real entries, areas and dialogues. The PC build reads the same file.',
@@ -610,6 +624,7 @@ function applyLang() {
   $('#share-report').textContent = t('patterns.report');
   $('#start-dialogue').textContent = t('chat.openFree');
   $('#dialogue-menu').textContent = t('chat.newOne');
+  $('#open-opts').setAttribute('aria-label', t('opts.label'));
 }
 
 /* ═══════════ Seiten ═══════════ */
@@ -666,6 +681,20 @@ function showProjectPane(which) {
 
 $('#show-projects').addEventListener('click', () => showProjectPane('projects'));
 $('#show-fields').addEventListener('click', () => showProjectPane('fields'));
+
+/* ═══════════ Rundgang und Optionen ═══════════ */
+
+function startWalkthrough() {
+  openWalkthrough({
+    el, lang: () => state.config.lang, goTo,
+    showPane: showProjectPane, setMode: setEntryMode
+  });
+}
+
+initOptions({
+  button: $('#open-opts'), panel: $('#opts'), el,
+  lang: () => state.config.lang, onWalk: startWalkthrough
+});
 
 /* ═══════════ Erfassen ═══════════ */
 
@@ -2237,6 +2266,10 @@ async function renderSettings() {
       class: 'btn btn--tiny', type: 'button',
       onclick: () => showIntro(state.config.lang)
     }, t('settings.introOpen'))));
+  wrap.append(setting(t('settings.walkLabel'), t('settings.walkDesc'),
+    el('button', {
+      class: 'btn btn--tiny', type: 'button', onclick: startWalkthrough
+    }, t('settings.walkOpen'))));
   wrap.append(setting(t('settings.purposeLabel'), t('proj.purpose'), null));
   wrap.append(setting(t('settings.voiceLabel'), t('settings.voiceDesc'), null));
 
@@ -2329,7 +2362,7 @@ async function renderSettings() {
     }, t('settings.wipe'))));
 
   wrap.append(el('p', { class: 'muted', style: 'text-align:center;font-size:.76rem;padding:10px 0 4px' },
-    'Tiefenjournal 1.2'));
+    'Tiefenjournal 1.3'));
 }
 
 /**
@@ -2680,6 +2713,10 @@ async function boot() {
     .catch(() => {});
 
   db.requestPersistence().catch(() => {});
+
+  // Nach der Sprachwahl, einmal: was hinter den drei Teilen steckt. Auch wer
+  // die App schon kennt, bekommt ihn einmal — die Begründungen sind neu.
+  if (!walkSeen()) startWalkthrough();
 }
 
 /**
