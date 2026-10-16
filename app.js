@@ -617,6 +617,7 @@ function applyLang() {
   $('#show-fields').textContent = t('proj.tabFields');
   $('#mode-journal-btn').textContent = t('mode.journal');
   $('#mode-three-btn').textContent = t('mode.three');
+  renderExpressButton();
   // Nach der Schleife, weil data-i18n-ph den Platzhalter sonst überschreibt.
   $('#free-text').placeholder = state.entryMode === 'journal'
     ? t('journal.placeholder') : t('free.placeholder');
@@ -1029,18 +1030,26 @@ function demoBanner() {
       }, t('demo.remove'))));
 }
 
+/**
+ * „Ohne Worte" steht auf „Heute", gleich neben Erzählen und Drei Sätzen:
+ * Es ist eine Art, den Tag festzuhalten, keine Funktion des Rückblicks.
+ */
+function renderExpressButton() {
+  const host = $('#express-host');
+  host.textContent = '';
+  // Das Symbol als Markup: document.createElement('svg') ergäbe ein
+  // HTML-Element ohne SVG-Namensraum, und das zeichnet der Browser nicht.
+  host.append(el('button', {
+    class: 'btn btn--ghost expressbtn', type: 'button', onclick: startExpress,
+    html: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19l7-7 2 2-7 7-2-2z"/>'
+      + '<path d="M18 13l-1.5-1.5"/><path d="M3 21l3-1 9-9-2-2-9 9-1 3z"/></svg>'
+  }, el('span', {}, t('express.open'))));
+}
+
 function renderTimeline() {
   const wrap = $('#timeline');
   const q = ($('#timeline-search').value || '').toLowerCase().trim();
   wrap.textContent = '';
-
-  // Der eine Weg hinaus aus der Seitenstruktur — auf eine leere Fläche.
-  wrap.append(el('button', {
-    class: 'btn btn--ghost expressbtn', type: 'button', onclick: startExpress
-  },
-    el('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true', html:
-      '<path d="M12 19l7-7 2 2-7 7-2-2z"/><path d="M18 13l-1.5-1.5"/><path d="M3 21l3-1 9-9-2-2-9 9-1 3z"/>' }),
-    el('span', {}, t('express.open'))));
 
   const banner = demoBanner();
   if (banner) wrap.append(banner);
@@ -2380,7 +2389,7 @@ async function renderSettings() {
     }, t('settings.wipe'))));
 
   wrap.append(el('p', { class: 'muted', style: 'text-align:center;font-size:.76rem;padding:10px 0 4px' },
-    'Tiefenjournal 1.4'));
+    'Tiefenjournal 1.5'));
 }
 
 /**
