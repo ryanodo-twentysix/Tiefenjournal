@@ -1187,11 +1187,28 @@ body.is-reading { overflow: hidden; }
 
 /* ─────────── Ohne Worte ─────────── */
 
+/* „Ohne Worte": eine eigene Art, den Tag festzuhalten — deshalb kräftig und
+   in der warmen Farbe, die sonst keine Handlung trägt, statt gestrichelt. */
 .expressbtn {
-  display: flex; align-items: center; gap: 9px; width: 100%;
-  margin-bottom: 14px; justify-content: center;
+  display: flex; align-items: center; gap: 13px; width: 100%;
+  min-height: 64px; margin-bottom: 14px; padding: 12px 16px;
+  border: 1.5px solid var(--warm); border-radius: var(--r);
+  background: var(--warm-soft); color: var(--warm-deep);
+  font: inherit; text-align: left; cursor: pointer;
+  box-shadow: 0 2px 0 var(--warm);
+  transition: transform .08s var(--ease), box-shadow .08s var(--ease);
 }
-.expressbtn svg { width: 18px; height: 18px; }
+.expressbtn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--warm); }
+.expressbtn__icon {
+  flex: none; display: grid; place-items: center;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--warm); color: var(--accent-ink);
+}
+.expressbtn__icon svg { width: 20px; height: 20px; }
+.expressbtn__text { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.expressbtn__text b { font-size: 1rem; font-weight: 650; }
+.expressbtn__text span { font-size: .8rem; line-height: 1.4; color: var(--ink-soft); }
+.expressbtn__go { flex: none; font-size: 1.2rem; }
 
 .entry--express { background: var(--paper); }
 .express__img {

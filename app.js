@@ -181,6 +181,7 @@ const EXTRA = {
     'ask.cancel': 'Abbrechen',
     'ask.remove': 'Entfernen',
     'express.open': 'Ohne Worte',
+    'express.sub': 'Zeichnen oder einfach Stimme — wenn Sätze gerade nicht passen',
     'express.keptDrawing': 'Zeichnung behalten',
     'express.keptVoice': 'Aufnahme behalten',
     'express.drawTag': 'Zeichnung',
@@ -382,6 +383,7 @@ const EXTRA = {
     'ask.cancel': 'Cancel',
     'ask.remove': 'Remove',
     'express.open': 'Without words',
+    'express.sub': 'Draw, or just use your voice — when sentences don’t fit right now',
     'express.keptDrawing': 'Drawing kept',
     'express.keptVoice': 'Recording kept',
     'express.drawTag': 'Drawing',
@@ -1040,10 +1042,14 @@ function renderExpressButton() {
   // Das Symbol als Markup: document.createElement('svg') ergäbe ein
   // HTML-Element ohne SVG-Namensraum, und das zeichnet der Browser nicht.
   host.append(el('button', {
-    class: 'btn btn--ghost expressbtn', type: 'button', onclick: startExpress,
-    html: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19l7-7 2 2-7 7-2-2z"/>'
-      + '<path d="M18 13l-1.5-1.5"/><path d="M3 21l3-1 9-9-2-2-9 9-1 3z"/></svg>'
-  }, el('span', {}, t('express.open'))));
+    class: 'expressbtn', type: 'button', onclick: startExpress,
+    html: '<span class="expressbtn__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19l7-7 2 2-7 7-2-2z"/>'
+      + '<path d="M18 13l-1.5-1.5"/><path d="M3 21l3-1 9-9-2-2-9 9-1 3z"/></svg></span>'
+  },
+    el('span', { class: 'expressbtn__text' },
+      el('b', {}, t('express.open')),
+      el('span', {}, t('express.sub'))),
+    el('span', { class: 'expressbtn__go', 'aria-hidden': 'true' }, '→')));
 }
 
 function renderTimeline() {
