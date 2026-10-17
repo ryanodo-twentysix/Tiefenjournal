@@ -220,7 +220,7 @@ body.is-choosing .tiles { display: none; }
 }
 .intro-screen__go { width: 100%; margin-top: 6px; }
 
-/* Die auf der Einführung gelesene Sprache steht auf der Wahlseite vorn. */
+/* Die Sprache des Browsers steht auf der Wahlseite vorn. */
 .welcome__btn.is-suggested { border-color: var(--blue); }
 
 /* ─────────── Getrennte Seiten ───────────

@@ -2343,7 +2343,7 @@ async function renderSettings() {
   wrap.append(setting(t('settings.introLabel'), t('settings.introDesc'),
     el('button', {
       class: 'btn btn--tiny', type: 'button',
-      onclick: () => showIntro(state.config.lang)
+      onclick: () => showIntro(state.config.lang, { fixedLang: false })
     }, t('settings.introOpen'))));
   wrap.append(setting(t('settings.walkLabel'), t('settings.walkDesc'),
     el('button', {
@@ -2434,7 +2434,7 @@ async function renderSettings() {
     }, t('settings.wipe'))));
 
   wrap.append(el('p', { class: 'muted', style: 'text-align:center;font-size:.76rem;padding:10px 0 4px' },
-    'Tiefenjournal 1.8'));
+    'Tiefenjournal 1.9'));
 }
 
 /**
@@ -2747,21 +2747,24 @@ const markIntroSeen = () => {
 };
 
 /**
- * Die allererste Seite: wozu das hier gut ist.
+ * Die Erklärseite: wozu das hier gut ist.
  *
- * Sie steht noch vor der Sprachwahl. Wer die App zum ersten Mal öffnet, soll
- * nicht als Erstes eine Entscheidung treffen müssen, deren Gegenstand er noch
- * nicht kennt.
+ * Sie kommt direkt nach der Sprachwahl, damit sie gleich in der richtigen
+ * Sprache dasteht — eine Erklärung vor der Wahl müsste man womöglich in einer
+ * Sprache lesen, die man nicht versteht.
  *
- * Der Umschalter oben ist keine zweite Sprachwahl, sondern nur die Lesesprache
- * dieser Seite — die verbindliche Wahl kommt danach. Er gibt sie aber als
- * Vorschlag weiter, damit niemand dasselbe zweimal entscheidet.
+ * Beim ersten Start ist ihr Umschalter ausgeblendet (die Sprache steht ja
+ * schon fest). Unter „Mehr" wieder aufgeschlagen, dient er als reine
+ * Lesesprache dieser Seite und ändert die App nicht.
  */
 let introLang = null;
 let introDone = null;
 
-function showIntro(start) {
+function showIntro(start, { fixedLang = false } = {}) {
   const screen = $('#intro');
+  // Beim ersten Start ist die Sprache schon gewählt — dann braucht die Seite
+  // keinen eigenen Umschalter. Unter „Mehr" wieder aufgeschlagen behält sie ihn.
+  $('#intro-de').parentElement.hidden = fixedLang;
   introLang = start
     || ((navigator.language || 'de').toLowerCase().startsWith('de') ? 'de' : 'en');
 
@@ -2802,7 +2805,7 @@ function showIntro(start) {
  * welcher Sprache der Beispielverlauf angelegt wird. Deshalb wird vorher
  * nichts geschrieben.
  *
- * @param suggested  die auf der Einführungsseite gelesene Sprache
+ * @param suggested  die Sprache des Browsers, als Vorschlag
  */
 function askLanguage(suggested = 'de') {
   return new Promise(resolve => {
@@ -2819,9 +2822,8 @@ function askLanguage(suggested = 'de') {
     $('#pick-de').addEventListener('click', () => choose('de'), { once: true });
     $('#pick-en').addEventListener('click', () => choose('en'), { once: true });
 
-    // Die eben gelesene Sprache steht vorn, ist aber nicht gesetzt: Wer die
-    // Einführung auf Englisch gelesen hat, will meistens auch so weitermachen
-    // — entscheiden soll es trotzdem er.
+    // Die Sprache des Browsers steht vorn, ist aber nicht gesetzt —
+    // entscheiden soll trotzdem der Mensch.
     const first = suggested === 'en' ? '#pick-en' : '#pick-de';
     $(first)?.classList.add('is-suggested');
     setTimeout(() => $(first)?.focus(), 60);
@@ -2851,10 +2853,14 @@ async function boot() {
         : { ...state.config, lang: remembered, langChosen: true };
     }
   } else if (!state.config.langChosen) {
-    // Erster Start: erst erklären, wozu das hier gut ist, dann fragen —
-    // und beides, bevor irgendetwas angelegt wird.
-    const read = introSeen() ? null : await showIntro();
-    await commitLang(await askLanguage(read || 'de'));
+    // Erster Start: zuerst die Sprache, dann in dieser Sprache erklären,
+    // wozu das hier gut ist — beides, bevor irgendetwas angelegt wird. Eine
+    // Erklärseite vor der Sprachwahl müsste man womöglich in einer Sprache
+    // lesen, die man nicht versteht.
+    const browserLang = (navigator.language || 'de').toLowerCase().startsWith('de') ? 'de' : 'en';
+    const lang = await askLanguage(browserLang);
+    await commitLang(lang);
+    if (!introSeen()) await showIntro(lang, { fixedLang: true });
   } else {
     // Aus der Datenbank gelesen, aber noch nicht gemerkt — nachtragen.
     writeStoredLang(state.config.lang);
