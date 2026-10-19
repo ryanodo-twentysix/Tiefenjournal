@@ -1702,3 +1702,19 @@ body.is-choosing .opts, body.is-choosing .walk { display: none; }
 .savedtip__row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
 @keyframes tippop { from { transform: translateY(10px) scale(.98); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes tipfade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Rundgang, Ansehen-Phase: das Blatt schrumpft zu einer schmalen Leiste,
+   damit die Seite darüber frei liegt und sich ausprobieren lässt. */
+.walk__bar {
+  pointer-events: auto;
+  width: 100%; max-width: 540px;
+  padding: 11px 14px 10px;
+  background: var(--raised); color: var(--ink);
+  border: 1px solid var(--line-hi); border-radius: var(--r);
+  box-shadow: 0 -4px 22px rgb(0 0 0 / .14), 0 0 0 1px rgb(240 128 31 / .25);
+  animation: walk-in .22s var(--ease);
+}
+.walk__bar-text { display: grid; gap: 2px; }
+.walk__bar-hint { font-size: .88rem; font-weight: 600; line-height: 1.4; }
+.walk__bar-line { font-size: .76rem; line-height: 1.4; color: var(--ink-faint); }
+.walk__bar .walk__foot { margin-top: 8px; }

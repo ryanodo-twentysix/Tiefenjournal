@@ -81,7 +81,7 @@ const STEPS = [
       ],
       why: 'Wer Gefühle feiner unterscheidet, reagiert unter Ärger seltener aggressiv und kommt mit Belastung besser zurecht. Wer beim Schreiben zunehmend Ursache-Wörter benutzt (weil, deshalb, mir wird klar), profitiert am meisten davon. Und Paare, in denen einer über die Beziehung schrieb, benutzten danach mehr Gefühlswörter miteinander — und waren Monate später häufiger noch zusammen.',
       short: 'Kashdan et al. 2015 · Pond et al. 2012 · Pennebaker et al. 1997 · Slatcher & Pennebaker 2006',
-      hint: 'Probier es aus: „Drei Sätze“ oben auf der Seite Heute.'
+      hint: 'Tippe auf „Drei Sätze“ und such dir ein Gefühl aus der Liste aus.'
     },
     en: {
       eyebrow: 'Step 1 · Vocabulary',
@@ -92,7 +92,7 @@ const STEPS = [
       ],
       why: 'People who tell their feelings apart more finely act out less when angry and cope better with strain. People whose writing increasingly uses causal words (because, therefore, I realise) benefit most from it. And couples in which one partner wrote about the relationship used more emotion words with each other afterwards — and were more often still together months later.',
       short: 'Kashdan et al. 2015 · Pond et al. 2012 · Pennebaker et al. 1997 · Slatcher & Pennebaker 2006',
-      hint: 'Try it: "Three sentences" at the top of Today.'
+      hint: 'Tap "Three sentences" and pick a feeling from the list.'
     }
   },
   {
@@ -106,7 +106,7 @@ const STEPS = [
       ],
       why: 'Wird ein innerer Konflikt in ein Entweder-oder gepresst, springt man zwischen den Seiten hin und her — das erzeugt Frust und Verwirrung. George Vaillant zählt das Ganz-gut-oder-ganz-schlecht-Sehen zu den unreifen Abwehrformen; reife Bewältigung lässt den Konflikt bestehen und gibt ihm eine Form. Menschen in Psychotherapie, die gemischte Gefühle zulassen konnten, ging es in den Wochen danach messbar besser.',
       short: 'Vaillant 1992, 2000 · Larsen et al. 2001 · Adler & Hershfield 2012',
-      hint: 'Tippe auf „Mustererkennung“ und dort auf „Widersprüche halten“.'
+      hint: 'Scroll durch die Kreise: In der Mitte stehen die Tage, an denen beides zugleich da war.'
     },
     en: {
       eyebrow: 'Step 2 · Patterns',
@@ -117,7 +117,7 @@ const STEPS = [
       ],
       why: 'Squeeze an inner conflict into either-or and you swing between the sides — which breeds frustration and confusion. George Vaillant counts all-good-or-all-bad seeing among the immature defences; mature coping lets the conflict stand and gives it a form. People in psychotherapy who could allow mixed feelings measurably improved in the weeks that followed.',
       short: 'Vaillant 1992, 2000 · Larsen et al. 2001 · Adler & Hershfield 2012',
-      hint: 'Tap "Pattern Recognition", then "Holding Contradictions".'
+      hint: 'Scroll through the circles: the middle holds the days when both were there at once.'
     }
   },
   {
@@ -131,7 +131,7 @@ const STEPS = [
       ],
       why: 'In der kognitiven Therapie sagt der Gebrauch sokratischer Fragen voraus, wie stark Beschwerden von Sitzung zu Sitzung zurückgehen. Und wer eine belastende Erfahrung mit etwas Abstand betrachtet, statt in ihr zu kreisen, grübelt weniger und versteht sie besser.',
       short: 'Braun et al. 2015 · Kross & Ayduk 2011',
-      hint: 'Tippe auf „Dialog“ — offen beginnen oder bei einem Thema.'
+      hint: 'Tippe auf „Offen beginnen“ – oder beginne bei einem deiner Muster.'
     },
     en: {
       eyebrow: 'Step 3 · Dialogue',
@@ -142,7 +142,7 @@ const STEPS = [
       ],
       why: 'In cognitive therapy, the use of Socratic questions predicts how much symptoms ease from one session to the next. And looking at a painful experience from a little distance, instead of circling inside it, means less brooding and more understanding.',
       short: 'Braun et al. 2015 · Kross & Ayduk 2011',
-      hint: 'Tap "Dialogue" — start openly or from a pattern.'
+      hint: 'Tap "Start open" – or begin from one of your patterns.'
     }
   },
   {
@@ -154,7 +154,7 @@ const STEPS = [
         'Hinter den drei Punkten oben rechts findest du Farbpaletten und Formen — und diesen Rundgang, falls du ihn noch einmal sehen willst.',
         'Kein Ersatz für Therapie. Alles bleibt auf deinem Gerät.'
       ],
-      hint: ''
+      hint: 'Tippe auf die drei Punkte oben rechts.'
     },
     en: {
       eyebrow: 'Finally',
@@ -163,26 +163,44 @@ const STEPS = [
         'Behind the three dots at the top right you will find colour palettes and shapes — and this tour, in case you want to see it again.',
         'No replacement for therapy. Everything stays on your device.'
       ],
-      hint: ''
+      hint: 'Tap the three dots at the top right.'
     }
   }
 ];
 
 const UI = {
-  de: { back: 'Zurück', next: 'Weiter', done: 'Los geht\'s', skip: 'Überspringen', why: 'Warum das hilft', sources: 'Quellen', step: (i, n) => `${i} von ${n}` },
-  en: { back: 'Back', next: 'Next', done: 'Let\'s go', skip: 'Skip', why: 'Why it helps', sources: 'Sources', step: (i, n) => `${i} of ${n}` }
+  de: {
+    back: 'Zurück', next: 'Weiter', done: 'Los geht\'s', skip: 'Überspringen',
+    why: 'Warum das hilft', sources: 'Quellen', step: (i, n) => `${i} von ${n}`,
+    look: 'Selbst ansehen', text: 'Erklärung',
+    lookLine: 'Schau dich in Ruhe um – tippe, scrolle, probier aus. Was leuchtet, kannst du drücken.'
+  },
+  en: {
+    back: 'Back', next: 'Next', done: 'Let\'s go', skip: 'Skip',
+    why: 'Why it helps', sources: 'Sources', step: (i, n) => `${i} of ${n}`,
+    look: 'Look for yourself', text: 'Explanation',
+    lookLine: 'Take your time – tap, scroll, try things out. Anything glowing can be pressed.'
+  }
 };
 
 /**
- * @param deps.el, deps.lang()   Werkzeug und Sprache der App
- * @param deps.goTo(page)        Seite aufschlagen
- * @param deps.showPane(which)   Teilbereich auf „Mustererkennung“
- * @param deps.setMode(mode)     Erzählen / Drei Sätze
+ * Jeder Schritt mit etwas zum Ansehen hat zwei Phasen:
+ *
+ *   lesen    — das Blatt mit der Erklärung. Es deckt einen Teil der Seite zu.
+ *   ansehen  — das Blatt schrumpft zu einer schmalen Leiste; die Seite liegt
+ *              frei, man kann scrollen, tippen, ausprobieren. „Weiter" geht
+ *              erst von hier zum nächsten Schritt.
+ *
+ * Der Zwischenschritt ist Absicht: Die Erklärungen sind lang, und wer gerade
+ * etwas über Widersprüche gelesen hat, soll die Kreise in Ruhe ansehen können,
+ * bevor der nächste Text kommt. Schritte ohne Ziel auf der Seite (der
+ * Überblick am Anfang) haben nur die Lesephase.
  */
 export function openWalkthrough({ el, lang, goTo, showPane, setMode }) {
   const host = document.getElementById('walk');
   const lit = new Set();
   let index = 0;
+  let phase = 'read';
 
   const unflare = () => { for (const n of lit) n.classList.remove('flare'); lit.clear(); };
 
@@ -191,34 +209,46 @@ export function openWalkthrough({ el, lang, goTo, showPane, setMode }) {
     markWalkSeen();
     host.hidden = true;
     host.textContent = '';
+    host.classList.remove('walk--look');
     document.removeEventListener('keydown', onKey);
     goTo('heute');
   };
 
+  const canLook = i => STEPS[i].flare.length > 0;
+
   const onKey = ev => {
     if (ev.key === 'Escape') finish();
-    else if (ev.key === 'ArrowRight') go(index + 1);
-    else if (ev.key === 'ArrowLeft') go(index - 1);
+    else if (ev.key === 'ArrowRight') forward();
+    else if (ev.key === 'ArrowLeft') backward();
+  };
+
+  // Vorwärts: vom Lesen ins Ansehen, vom Ansehen zum nächsten Schritt.
+  const forward = () => {
+    if (phase === 'read' && canLook(index)) { phase = 'look'; paint(); return; }
+    go(index + 1);
+  };
+  const backward = () => {
+    if (phase === 'look') { phase = 'read'; paint(); return; }
+    go(index - 1);
   };
 
   const go = i => {
     if (i < 0) return;
     if (i >= STEPS.length) { finish(); return; }
     index = i;
+    phase = 'read';
+    stage();
     paint();
   };
 
-  const paint = () => {
+  // Seite aufschlagen und Ziele zum Leuchten bringen — einmal je Schritt, nicht
+  // bei jedem Phasenwechsel, damit die Seite beim Hin und Her nicht springt.
+  const stage = () => {
     const step = STEPS[index];
-    const L = lang() === 'en' ? 'en' : 'de';
-    const tx = step[L];
-    const ui = UI[L];
-    const last = index === STEPS.length - 1;
-
     goTo(step.page);
     if (step.pane) showPane(step.pane);
     if (step.mode) setMode(step.mode);
-    // Was der Schritt erklärt, soll über dem Blatt zu sehen sein.
+    // Was der Schritt erklärt, soll zu sehen sein.
     if (step.show) document.querySelector(step.show)?.scrollIntoView({ block: 'start' });
 
     unflare();
@@ -226,8 +256,39 @@ export function openWalkthrough({ el, lang, goTo, showPane, setMode }) {
       const n = document.querySelector(sel);
       if (n && !n.hidden) { n.classList.add('flare'); lit.add(n); }
     }
+  };
+
+  const dots = ui => el('div', { class: 'walk__dots', 'aria-label': ui.step(index + 1, STEPS.length) },
+    STEPS.map((_, i) => el('i', { class: i === index ? 'on' : '' })));
+
+  const paint = () => {
+    const step = STEPS[index];
+    const L = lang() === 'en' ? 'en' : 'de';
+    const tx = step[L];
+    const ui = UI[L];
+    const last = index === STEPS.length - 1;
+    const look = canLook(index);
 
     host.textContent = '';
+    host.classList.toggle('walk--look', phase === 'look');
+
+    if (phase === 'look') {
+      const bar = el('div', { class: 'walk__bar', role: 'region', 'aria-label': tx.eyebrow },
+        el('div', { class: 'walk__bar-text' },
+          el('span', { class: 'walk__eyebrow' }, tx.eyebrow),
+          tx.hint ? el('p', { class: 'walk__bar-hint' }, tx.hint) : null,
+          el('p', { class: 'walk__bar-line' }, ui.lookLine)),
+        el('div', { class: 'walk__foot' },
+          dots(ui),
+          el('div', { class: 'walk__btns' },
+            el('button', { class: 'btn btn--tiny flare-soft', type: 'button', onclick: backward }, `↑ ${ui.text}`),
+            el('button', { class: 'btn btn--primary btn--tiny flare', type: 'button', onclick: forward },
+              last ? ui.done : `${ui.next} →`))));
+      host.append(bar);
+      bar.querySelector('.btn--primary')?.focus({ preventScroll: true });
+      return;
+    }
+
     const sheet = el('div', { class: 'walk__sheet', role: 'dialog', 'aria-modal': 'false', 'aria-labelledby': 'walk-title' },
       el('div', { class: 'walk__top' },
         el('span', { class: 'walk__eyebrow' }, tx.eyebrow),
@@ -244,14 +305,15 @@ export function openWalkthrough({ el, lang, goTo, showPane, setMode }) {
         el('details', { class: 'walk__refs' },
           el('summary', {}, `${ui.sources}: ${tx.short}`),
           el('ul', {}, REFS[step.refs].map(r => el('li', {}, r))))) : null,
-      tx.hint ? el('p', { class: 'walk__hint' }, tx.hint) : null,
+      // Der Hinweis, was man drücken kann, steht in der Ansehen-Leiste —
+      // hier nur, wenn es keine gibt.
+      tx.hint && !look ? el('p', { class: 'walk__hint' }, tx.hint) : null,
       el('div', { class: 'walk__foot' },
-        el('div', { class: 'walk__dots', 'aria-label': ui.step(index + 1, STEPS.length) },
-          STEPS.map((_, i) => el('i', { class: i === index ? 'on' : '' }))),
+        dots(ui),
         el('div', { class: 'walk__btns' },
-          index > 0 ? el('button', { class: 'btn btn--tiny flare-soft', type: 'button', onclick: () => go(index - 1) }, ui.back) : null,
-          el('button', { class: 'btn btn--primary btn--tiny flare', type: 'button', onclick: () => go(index + 1) },
-            last ? ui.done : ui.next))));
+          index > 0 ? el('button', { class: 'btn btn--tiny flare-soft', type: 'button', onclick: backward }, ui.back) : null,
+          el('button', { class: 'btn btn--primary btn--tiny flare', type: 'button', onclick: forward },
+            look ? `${ui.look} →` : (last ? ui.done : ui.next)))));
 
     host.append(sheet);
     sheet.scrollTop = 0;

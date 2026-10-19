@@ -2434,7 +2434,7 @@ async function renderSettings() {
     }, t('settings.wipe'))));
 
   wrap.append(el('p', { class: 'muted', style: 'text-align:center;font-size:.76rem;padding:10px 0 4px' },
-    'Tiefenjournal 1.9'));
+    'Tiefenjournal 2.0'));
 }
 
 /**
